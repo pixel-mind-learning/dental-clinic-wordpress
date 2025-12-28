@@ -1,0 +1,19 @@
+# WordPress core files
+wp-data/wp-admin/
+wp-data/wp-includes/
+
+# Uploads (optional – keep if needed)
+# wp-data/wp-content/uploads/
+
+# Database data (never commit)
+db-data/
+
+# Env files
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
