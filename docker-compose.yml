@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  dental_clinic_wp_db:
+    image: mysql:8.0
+    container_name: dental_clinic_wp_db
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3306:3306" 
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./db-data:/var/lib/mysql
+
+  dental_clinic_wp_app:
+    image: wordpress:php8.1-apache
+    container_name: dental_clinic_wp_app
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${WP_PORT}:80"
+    environment:
+      WORDPRESS_DB_HOST: dental_clinic_wp_db
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+    volumes:
+      - ./wp-data:/var/www/html
+    depends_on:
+      - dental_clinic_wp_db
+
+  # dental_clinic_phpmyadmin:
+    # image: phpmyadmin/phpmyadmin
+    # container_name: dental_clinic_wp_pma
+    # restart: always
+    # ports:
+      # - "8081:80"
+    # environment:
+      # PMA_HOST: ${PMA_HOST}
+      # PMA_USER: ${PMA_USER}
+      # PMA_PASSWORD: ${PMA_PASSWORD}
+    # depends_on:
+      # - dental_clinic_wp_db
